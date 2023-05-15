@@ -17,7 +17,23 @@ const User = sequelize.define('User', {
   }
 });
 
-// Add more model definitions as needed
+const Terminal = sequelize.define('Terminal', {
+  config: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  usserId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: User, // Can be both a string representing the table name or a Sequelize model
+      key: 'id'
+    }
+  }
+});
+
+User.hasMany(Terminal)
+Terminal.hasOne(User)
+
 
 sequelize.sync(); // Sync the models with the database
 
