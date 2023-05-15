@@ -30,4 +30,4 @@ Terminal.hasOne(User)
 
 sequelize.sync(); // Sync the models with the database
 
-module.exports = { User }; // Export your models for use in other parts of your app
+module.exports = { User, Terminal }; // Export your models for use in other parts of your app

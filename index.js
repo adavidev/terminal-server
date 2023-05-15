@@ -1,5 +1,5 @@
 const express = require('express');
-const { User } = require('./models.js');
+const { User, Terminal } = require('./models.js');
 
 const app = express();
 console.log(process.env.DATABASE_URL)
@@ -14,6 +14,11 @@ app.get('/', (req, res) => {
 app.get('/users', async (req, res) => {
   const users = await User.findAll();
   res.json(users);
+});
+
+app.get('/terminals', async (req, res) => {
+  const terminals = await Terminal.findAll();
+  res.json(terminals);
 });
 
 
