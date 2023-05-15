@@ -22,13 +22,6 @@ const Terminal = sequelize.define('Terminal', {
     type: DataTypes.STRING,
     allowNull: true
   },
-  usserId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: User, // Can be both a string representing the table name or a Sequelize model
-      key: 'id'
-    }
-  }
 });
 
 User.hasMany(Terminal)
