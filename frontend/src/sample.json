@@ -1,0 +1,40 @@
+{
+  "config": {},
+  "pages": [
+    {
+      "id": "login",
+      "type": "screen",
+      "content": [
+        "Station Jaipur-65",
+        "===========",
+        "Please Log in:",
+        {
+          "type": "input",
+          "prompt": "Name:",
+          "memoryName": "username",
+          "rules": []
+        },
+        "Thank you {username}.",
+        "======",
+        { "text": "Go to Menu", "target": "menu", "type": "links" }
+      ]
+    },
+    {
+      "id": "menu",
+      "type": "screen",
+      "content": [
+        "Navigation: ",
+        "===========",
+        "===========",
+        "===========",
+        "===========",
+        "===========",
+        "===========",
+        "===========",
+        "===========",
+        "===========",
+        { "text": "Logout", "target": "login", "type": "links" }
+      ]
+    }
+  ]
+}
