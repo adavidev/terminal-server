@@ -1,4 +1,4 @@
-const sequelize = require('./db.js');
+const sequelize = require('../db.js');
 const { DataTypes } = require('sequelize');
 
 const User = sequelize.define('User', {
@@ -19,6 +19,13 @@ const User = sequelize.define('User', {
 
 const Terminal = sequelize.define('Terminal', {
   config: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+});
+
+const Link = sequelize.define('Link', {
+  name: {
     type: DataTypes.STRING,
     allowNull: true
   },
@@ -27,7 +34,9 @@ const Terminal = sequelize.define('Terminal', {
 User.hasMany(Terminal)
 Terminal.hasOne(User)
 
+Terminal.hasMany(Link)
+Link.hasOne(Terminal)
 
 sequelize.sync(); // Sync the models with the database
 
-module.exports = { User, Terminal }; // Export your models for use in other parts of your app
+module.exports = { User, Terminal, Link }; // Export your models for use in other parts of your app
