@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 const Login = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -20,7 +20,7 @@ const Login = () => {
       if (response.ok) {
         const { token } = await response.json();
         localStorage.setItem('token', token); // Store the JWT token in localStorage
-        history.push('/dashboard'); // Redirect to the dashboard or protected route
+        navigate('/') // Redirect to the dashboard or protected route
       } else {
         setError('Invalid email or password');
       }

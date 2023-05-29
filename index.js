@@ -2,6 +2,7 @@ const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const { User, Terminal, Link } = require('./models/models.js');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const app = express();
 app.use(express.json());
@@ -52,19 +53,24 @@ app.post('api/login', async (req, res) => {
 })
 
 app.post('/api/users', async (req, res) => {
-  const saltRounds = 10; // Number of salt rounds (recommended value: 10)
+  try {
+    const saltRounds = 10; // Number of salt rounds (recommended value: 10)
 
-  // Inside the user registration route handler
-  const { email, password } = req.body;
+    // Inside the user registration route handler
+    const { firstName, lastName, email, password } = req.body;
 
-  // Generate a salt and hash the password
-  const salt = await bcrypt.genSalt(saltRounds);
-  const hashedPassword = await bcrypt.hash(password, salt);
+    // Generate a salt and hash the password
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-  // Store the hashed password in the database
-  await User.create({ email, password: hashedPassword });
+    // Store the hashed password in the database
+    await User.create({ firstName, lastName, email, password: hashedPassword });
 
-  res.status(201);
+    res.status(201).json({ success: 'User created.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
 });
 
 app.get('/api/users', async (req, res) => {
