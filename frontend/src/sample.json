@@ -1,5 +1,7 @@
 {
-  "config": {},
+  "config": {
+    "name": "Jaipur-65"
+  },
   "pages": [
     {
       "id": "login",

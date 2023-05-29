@@ -1,6 +1,7 @@
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const { User, Terminal, Link } = require('./models/models.js');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(express.json());
@@ -17,14 +18,74 @@ app.get(/^(?!\/api\/).*/, (req, res) => {
 // Use port from Heroku, fall back to default port
 const port = process.env.PORT || 3000;
 
+app.post('api/login', async (req, res) => {
+
+  // Inside the user login route handler
+  const { email, password } = req.body;
+
+  // Retrieve the user's hashed password from the database based on their email
+  const user = await User.findOne({ where: { email } });
+
+  if (!user) {
+    // Handle user not found
+    return res.status(404).json({ error: 'User or Password did not match.' });
+  }
+
+  const storedHashedPassword = user.password;
+
+  // Compare the entered password with the stored hashed password
+  const passwordMatch = await bcrypt.compare(password, storedHashedPassword);
+
+  if (passwordMatch) {
+    // Passwords match, proceed with user authentication
+
+    // Generate and sign a JWT token
+    const token = jwt.sign({ userId: user.id, email: user.email }, 'your-secret-key');
+
+    // Send the token back to the client
+    res.json({ token });
+  } else {
+    // Passwords don't match, handle incorrect password
+    return res.status(404).json({ error: 'User or Password did not match.' });
+  }
+
+})
+
+app.post('/api/users', async (req, res) => {
+  const saltRounds = 10; // Number of salt rounds (recommended value: 10)
+
+  // Inside the user registration route handler
+  const { email, password } = req.body;
+
+  // Generate a salt and hash the password
+  const salt = await bcrypt.genSalt(saltRounds);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  // Store the hashed password in the database
+  await User.create({ email, password: hashedPassword });
+
+  res.status(201);
+});
+
 app.get('/api/users', async (req, res) => {
   const users = await User.findAll();
   res.json(users);
 });
 
 app.get('/api/terminals', async (req, res) => {
-  const terminals = await Terminal.findAll();
-  res.json(terminals);
+  try {
+    const terminals = await Terminal.findAll({
+      include: {
+        model: Link,
+        attributes: ['name'],
+      },
+    });
+
+    res.json(terminals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
 });
 
 app.get('/api/links', async (req, res) => {
@@ -64,7 +125,12 @@ app.post('/api/terminals', async (req, res) => {
     // Create the Terminal with the provided config
     const terminal = await Terminal.create({ config });
 
-    res.status(201).json(terminal);
+    const linkName = uuidv4();
+    const link = await Link.create({ name: linkName, TerminalId: terminal.id });
+    console.log(link)
+    console.log(terminal)
+
+    res.status(201).json({terminal, link});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server error' });
@@ -84,7 +150,7 @@ app.get('/api/links/:name', async (req, res) => {
     }
 
     // Get the associated Terminal for the Link
-    const terminal = await Terminal.findByPk(link.terminalId);
+    const terminal = await Terminal.findByPk(link.TerminalId);
 
     if (!terminal) {
       return res.status(404).json({ error: 'Terminal not found' });

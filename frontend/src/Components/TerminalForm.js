@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const TerminalForm = () => {
   const [config, setConfig] = useState('');
+  const [link, setLink] = useState(null)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,6 +14,8 @@ const TerminalForm = () => {
 
       // Handle success, e.g., show a success message or perform any necessary actions
       console.log('Terminal created:', response.data);
+
+      setLink(response.data.link.name)
 
       // Reset the form after successful submission
       setConfig('');
@@ -34,6 +37,7 @@ const TerminalForm = () => {
         />
       </div>
       <button type="submit">Create Terminal</button>
+      <div>{link}</div>
     </form>
   );
 };

@@ -35,7 +35,7 @@ User.hasMany(Terminal)
 Terminal.hasOne(User)
 
 Terminal.hasMany(Link)
-Link.hasOne(Terminal)
+Link.belongsTo(Terminal)
 
 sequelize.sync(); // Sync the models with the database
 

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setMemory } from "../stores/brainSlice"
 
 export default ({doneCallback, options}) => {
-  const memory = useSelector((state) => state.brain.memory)
+  const [pages, memory] = useSelector((state) => [state.brain.pages, state.brain.memory])
   const dispatch = useDispatch()
 
   const interpolateNamedValues = (templateValues, namedValues) => {
@@ -14,7 +14,7 @@ export default ({doneCallback, options}) => {
     return interpolatedValue;
   }
 
-  const setPageTo = {page: memory.pages.findIndex((page) => (page.id == options.target) )}
+  const setPageTo = {page: pages.findIndex((page) => (page.id == options.target) )}
   console.log(setPageTo)
   
   return (

@@ -6,9 +6,8 @@ export const brainSlice = createSlice({
   initialState: {
     memory: {
       page: 0,
-      pages: sample.pages
-
     },
+    pages: null,
   },
   reducers: {
     setMemory: (state, action) => {
@@ -18,10 +17,14 @@ export const brainSlice = createSlice({
       // immutable state based off those changes
       state.memory = {...state.memory, ...action.payload}
     },
+    fetchPages: (state, action) => {
+      console.log('Running: ', action.payload)
+      state.pages = JSON.parse(action.payload.config).pages
+    }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setMemory } = brainSlice.actions
+export const { setMemory, fetchPages } = brainSlice.actions
 
 export default brainSlice.reducer

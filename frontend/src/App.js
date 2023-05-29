@@ -6,31 +6,40 @@ import store from './store'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import TerminalForm from './Components/TerminalForm'
+import AppMenu from './Components/AppMenu'
+import TerminalList from './Components/TerminalList'
 
 const App = () => {
   return (
-    <Router>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/terminals">Terminals</Link>
-          </li>
-        </ul>
-      </nav>
-
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/terminals" element={<TerminalForm />} />
-      </Routes>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/terminals" element={<Editor />} />
+          <Route path="/viewer/:name" element={<TerminalViewer />} />
+        </Routes>
+      </Router>
+    </Provider>
   );
 };
 
 const Home = () => {
-  return <h1>Welcome to the Home Page!</h1>;
+  return (
+    <div>
+      <AppMenu />
+      <h1>Welcome to the Home Page!</h1>
+    </div>
+  )
+};
+
+const Editor = () => {
+  return (
+    <div>
+      <AppMenu />
+      <TerminalForm />
+      <TerminalList />
+    </div>
+  )
 };
   
 export default App;
