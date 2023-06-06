@@ -1,5 +1,4 @@
-import { configureStore,createSlice } from '@reduxjs/toolkit'
-import sample from '../sample.json'
+import { createSlice } from '@reduxjs/toolkit'
 
 export const brainSlice = createSlice({
   name: 'brain',
@@ -8,6 +7,7 @@ export const brainSlice = createSlice({
       page: 0,
     },
     pages: null,
+    config: null,
   },
   reducers: {
     setMemory: (state, action) => {
@@ -19,7 +19,9 @@ export const brainSlice = createSlice({
     },
     fetchPages: (state, action) => {
       console.log('Running: ', action.payload)
-      state.pages = JSON.parse(action.payload.config).pages
+      const content = JSON.parse(action.payload.config)
+      state.pages = content.pages
+      state.config = content.config
     }
   },
 })

@@ -1,10 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Cursor from './cursor'
+import { Input } from './ThemedStyles'
+import { useSelector } from 'react-redux'
 
 const LineInput = ({ doneCallback }) => {
   const inputRef = useRef(null);
   const [disabled, setDisabled] = useState(false);
   const [inputWidth, setInputWidth] = useState(0);
+  const [theme] = useSelector((state) => [state.theme])
 
   useEffect(() => {
     inputRef.current.focus();
@@ -20,7 +23,8 @@ const LineInput = ({ doneCallback }) => {
 
   return (
     <>
-      <input
+      <Input
+        {...theme}
         ref={inputRef}
         style={{ 
           background: 'none', 

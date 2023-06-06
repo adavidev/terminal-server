@@ -29,7 +29,7 @@ app.post('api/login', async (req, res) => {
 
   if (!user) {
     // Handle user not found
-    return res.status(404).json({ error: 'User or Password did not match.' });
+    return res.status(404).json({ error: 'User did not match.' });
   }
 
   const storedHashedPassword = user.password;
@@ -47,7 +47,7 @@ app.post('api/login', async (req, res) => {
     res.json({ token });
   } else {
     // Passwords don't match, handle incorrect password
-    return res.status(404).json({ error: 'User or Password did not match.' });
+    return res.status(404).json({ error: 'Password did not match.' });
   }
 
 })

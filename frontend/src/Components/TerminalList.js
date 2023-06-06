@@ -38,7 +38,6 @@ const TerminalList = () => {
       {terminals.map((terminal) => (
         <div key={terminal.id}>
           <h3>Name: {terminal.config.config.name}</h3>
-          <p>Config: {JSON.stringify(terminal)}</p>
           <div>
             {terminal.Links.map((Link) => (
                 <>

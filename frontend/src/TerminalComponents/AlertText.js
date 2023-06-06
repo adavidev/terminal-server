@@ -1,4 +1,4 @@
-import { H2 } from "../ThemedStyles"
+import { AlertText } from "../ThemedStyles"
 import TypedText from "../TypedText"
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -15,8 +15,8 @@ export default ({doneCallback, options}) => {
   }
   
   return (
-  <H2 {...theme}>
-    <TypedText doneCallback={doneCallback} text={interpolateNamedValues(options, memory)}/>
-  </H2>
+  <AlertText {...theme}>
+    <TypedText doneCallback={doneCallback} text={interpolateNamedValues(options.text, memory)}/>
+  </AlertText>
 )
 }

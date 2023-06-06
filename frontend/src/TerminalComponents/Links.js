@@ -1,9 +1,11 @@
 import TypedText from "../TypedText"
 import { useSelector, useDispatch } from 'react-redux'
 import { setMemory } from "../stores/brainSlice"
+import { H2 } from "../ThemedStyles"
 
 export default ({doneCallback, options}) => {
   const [pages, memory] = useSelector((state) => [state.brain.pages, state.brain.memory])
+  const [theme] = useSelector((state) => [state.theme])
   const dispatch = useDispatch()
 
   const interpolateNamedValues = (templateValues, namedValues) => {
@@ -18,8 +20,8 @@ export default ({doneCallback, options}) => {
   console.log(setPageTo)
   
   return (
-    <h2 onClick={() => {dispatch(setMemory(setPageTo))}}>
+    <H2 {...theme} onClick={() => {dispatch(setMemory(setPageTo))}}>
       <TypedText doneCallback={doneCallback} text={interpolateNamedValues(options.text, memory)}/>
-    </h2>
+    </H2>
   )
 }

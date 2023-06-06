@@ -1,9 +1,10 @@
-import './App.scss';
+import './TerminalStyles.scss';
 
 import React, { useState, useEffect } from 'react'
 import TextBlock from './TerminalComponents/TextBlock'
 import InputField from './TerminalComponents/InputField'
 import { setMemory, fetchPages } from './stores/brainSlice'
+import { setColor, setBackgroundColor } from './stores/themeSlice'
 import { useSelector } from 'react-redux'
 import Links from './TerminalComponents/Links'
 import ScrollableDiv from './Components/ScrollableDiv'
@@ -11,6 +12,9 @@ import { useParams } from 'react-router-dom'
 import { useDispatch } from "react-redux"
 import axios from 'axios'
 import { memo } from 'react'
+import SlowLoadImage from './TerminalComponents/SlowLoadImage'
+import { StyledTerminal } from './ThemedStyles'
+import AlertText from './TerminalComponents/AlertText'
 
 const fromConfig = (pages) => {
   console.log(pages)
@@ -23,6 +27,12 @@ const fromConfig = (pages) => {
         })
       },
       {
+        determine: (val) => (val.type == 'inline-alert'),
+        resolve: (opts) => (({doneCallback}) => {
+          return (<AlertText doneCallback={doneCallback} options={opts}/>)
+        })
+      },
+      {
         determine: (val) => (val.type == 'input'),
         resolve: (opts) => (({doneCallback}) => {
           return (<InputField doneCallback={doneCallback} options={opts}/>)
@@ -31,7 +41,13 @@ const fromConfig = (pages) => {
       {
         determine: (val) => (val.type == 'links'),
         resolve: (opts) => (({doneCallback}) => {
-          return (<Links options={opts}/>)
+          return (<Links doneCallback={doneCallback} options={opts}/>)
+        })
+      },
+      {
+        determine: (val) => (val.type == 'image'),
+        resolve: (opts) => (({doneCallback}) => {
+          return (<SlowLoadImage doneCallback={doneCallback} options={opts}/>)
         })
       }
     ]
@@ -50,7 +66,8 @@ function TerminalViewer() {
   const [renderIndex, setRenderIndex] = useState(1)
   const [renderedItems, setRenderedItems] = useState([])
   const [renderables, setRenderables] = useState(null)
-  const [pages, memory] = useSelector((state) => [state.brain.pages, state.brain.memory])
+  const [pages, memory, config] = useSelector((state) => [state.brain.pages, state.brain.memory, state.brain.config])
+  const [theme] = useSelector((state) => [state.theme])
   const { name } = useParams();
   const dispatch = useDispatch()
 
@@ -106,11 +123,18 @@ function TerminalViewer() {
     }
   }, [memory.page, renderables])
 
+  useEffect(() => {
+    if(config){
+      dispatch(setColor(config.color))
+      dispatch(setBackgroundColor(config.backgroundColor))
+    }
+  }, [config])
+
   // useEffect(() => console.log(memory), [memory])
   // useEffect(() => console.log(pages), [pages])
 
     return renderedItems.length ? (
-      <div className="scanlines">
+      <StyledTerminal {...theme} className="scanlines terminal-app">
         <div className="screen-cone"></div>
         {/* <ScanLineSvg /> */}
        
@@ -119,7 +143,7 @@ function TerminalViewer() {
             {renderedItems.slice(0, Math.min(renderIndex, renderedItems.length)).map((component) => component)}
           </header>
         </ScrollableDiv>
-      </div>
+      </StyledTerminal>
     ) : null
 }
 

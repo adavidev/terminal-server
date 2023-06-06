@@ -10,6 +10,7 @@ import AppMenu from './Components/AppMenu'
 import TerminalList from './Components/TerminalList'
 import Login from './Components/LoginForm'
 import Signup from './Components/SignupForm'
+import ThemedStyles from './ThemedStyles'
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/testing" element={<Testing />} />
           <Route path="/terminals" element={<Editor />} />
           <Route path="/viewer/:name" element={<TerminalViewer />} />
         </Routes>
@@ -29,9 +31,9 @@ const App = () => {
 
 const Home = () => {
   return (
-    <div>
+    <div className="App">
       <AppMenu />
-      <h1>Welcome to the Home Page!</h1>
+      <h1>LoFi Computer Systems</h1>
       <li>
         <Link to="/signup">Signup</Link>
       </li>
@@ -67,4 +69,12 @@ const Editor = () => {
   )
 };
   
+const Testing = () => {
+  return (
+    <div className="App">
+        <ThemedStyles/>
+    </div>
+  )
+};
+
 export default App;

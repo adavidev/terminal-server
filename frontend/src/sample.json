@@ -1,13 +1,15 @@
 {
   "config": {
-    "name": "Jaipur-65"
+    "name": "Ypsilon-14",
+    "color": "#a9fe9d",
+    "backgroundColor": "#0f1c0d"
   },
   "pages": [
     {
       "id": "login",
       "type": "screen",
       "content": [
-        "Station Jaipur-65",
+        "Ypsilon-14 Station",
         "===========",
         "Please Log in:",
         {
@@ -16,26 +18,174 @@
           "memoryName": "username",
           "rules": []
         },
-        "Thank you {username}.",
+        "Thanks {username}.",
         "======",
-        { "text": "Go to Menu", "target": "menu", "type": "links" }
+        { "text": "> MENU", "target": "menu", "type": "links" }
       ]
     },
     {
       "id": "menu",
       "type": "screen",
       "content": [
-        "Navigation: ",
+        "Main Menu",
+        "=========",
+        "",
+        { "text": "> STATION MAP", "type": "links", "target": "map" },
+        { "text": "> DIAGNOSTICS", "type": "links", "target": "diagnostics" },
+        { "text": "> SCHEDULE", "type": "links", "target": "schedule" },
+        { "text": "> ROSTER", "type": "links", "target": "roster" },
+        { "text": "> COMMS", "type": "links", "target": "comms" },
+        { "text": "> CONTROLS", "type": "links", "target": "controls" }
+      ]
+    },
+    {
+      "id": "map",
+      "type": "screen",
+      "content": [
+        "Station Map",
         "===========",
+        "",
+        {
+          "type": "image",
+          "src": "https://i.imgur.com/htHuumj.png",
+          "resolution": 30,
+          "grayscale": true,
+          "width": 500,
+          "height": 350 
+        },
+        "",
+        "A copy of the map is now available via data tablet.",
+        "",
+        "======",
+        "",
+        { "text": "< BACK", "target": "menu", "type": "links" }
+      ]
+    },
+    {
+      "id": "diagnostics",
+      "type": "screen",
+      "content": [
+        "Diagnostics",
         "===========",
+        "",
+        "Checking life support.............. Done.",
+        "Checking main systems.............. Done.",
+        "",
+        {
+          "text": "WARNING: Airflow 82.4%. Check crew quarters vents for blockage.",
+          "type": "inline-alert"
+        },
+        {
+          "text": "WARNING: Shower #5 non-functional as of 1 day(s).",
+          "type": "inline-alert"
+        },
+        "",
+        "NOTICE: Air filters replaced 455 day(s) ago.",
+        "NOTICE: Mineshaft lift maintained 455 day(s) ago.",
+        "",
         "===========",
-        "===========",
-        "===========",
-        "===========",
-        "===========",
-        "===========",
-        "===========",
-        { "text": "Logout", "target": "login", "type": "links" }
+        "",
+        "SUMMARY:",
+        "All systems operating within acceptible parameters.",
+        "",
+        "======",
+        "",
+        { "text": "< BACK", "target": "menu", "type": "links" }
+      ]
+    },
+    {
+      "id": "schedule",
+      "type": "screen",
+      "content": [
+        "Schedule",
+        "========",
+        "",
+        "Docking bay activity (past 6 months):",
+        "",
+        "2366-06-12.0633 - Bay 2 : Arrive :: Tempest",
+        "2366-04-29.0834 - Bay 1 : Arrive :: Heracles",
+        "2366-03-02.1223 - Bay 2 : Depart :: Key Largo",
+        "2366-02-20.1604 - Bay 2 : Arrive :: Key Largo",
+        "",
+        "======",
+        "",
+        { "text": "< BACK", "target": "menu", "type": "links" }
+      ]
+    },
+    {
+      "id": "roster",
+      "type": "screen",
+      "content": [
+        "Roster",
+        "======",
+        "",
+        "01. VERHOEVEN, Sonya     :: Admin",
+        "02. SINGH, Ashraf        :: Breaker",
+        "03. DE BEERS, Dana       :: Lead drill",
+        "04. CHATZKEL, Jerome     :: Asst. drill",
+        "05. TOBIN, Rosa          :: Engineer",
+        "06. RADIMIR, Mikhail     :: Lead Engineer",
+        "07. KANTARO, Kenji       :: Loader",
+        "08. BOWE, Morgan         :: Loader",
+        "09. NEKTARIOS, Ri        :: Loader",
+        "10. n/a",
+        "",
+        "======",
+        "",
+        { "text": "< BACK", "target": "menu", "type": "links" }
+      ]
+    },
+    {
+      "id": "comms",
+      "type": "screen",
+      "content": [
+        "COMMS",
+        "=====",
+        "",
+        "2 vessels detected in proximity.",
+        "",
+        { "text": "> HAIL TEMPEST", "target": "hailtempest", "type": "links" },
+        { "text": "> HAIL HERECLES", "target": "hailherecles", "type": "links" },
+        "",
+        "======",
+        "",
+        { "text": "< BACK", "target": "menu", "type": "links" }
+      ]
+    },
+    {
+      "id": "hailtempest",
+      "type": "screen",
+      "content": [
+        "Transmitting",
+        "============",
+        "",
+        "..........................................",
+        "..........................................",
+        "",
+        "COMMUNICATION CHANNEL OPENED",
+        "",
+        "======",
+        "",
+        { "text": "< CLOSE CHANNEL", "target": "comms", "type": "links" }
+      ]
+    },
+    {
+      "id": "hailherecles",
+      "type": "screen",
+      "content": [
+        "Transmitting",
+        "============",
+        "",
+        "..........................................",
+        "..........................................",
+        "..........................................",
+        "..........................................",
+        "",
+        { "type": "inline-alert", "text": "NO RESPONSE" },
+        "",
+        "======",
+        "",
+        { "text": "< BACK", "target": "comms", "type": "links" }
       ]
     }
   ]
