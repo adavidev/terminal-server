@@ -5,6 +5,21 @@
                             'embedded-opentype', and 'svg' */
 }
 
+@font-face {
+  font-family: 'VGAFont';
+  src: local('VGAFont'), url('./fonts/oldschool_pc_font_pack_v2.2_FULL/ttf - Ac (aspect-corrected)/Ac437_Acer_VGA_9x8.ttf') format('truetype');
+  /* other formats include: 'woff2', 'truetype, 'opentype',
+                            'embedded-opentype', and 'svg' */
+}
+
+// @font-face {
+//   font-family: 'SnesFont';
+//   src: local('SnesFont'), url(./fonts/PressStart2P-Regular.ttf) format('truetype');
+//   /* other formats include: 'woff2', 'truetype, 'opentype',
+//                             'embedded-opentype', and 'svg' */
+// }
+
+// terminal-server/frontend/src/fonts/oldschool_pc_font_pack_v2.2_FULL/ttf - Ac (aspect-corrected)/Ac437_Acer_VGA_9x8.ttf
 body {
   height: 100vh;
   margin: 0;
@@ -15,25 +30,9 @@ body {
 }
 
 .terminal-app {
-  // text-align: left;
-  // background-color: #282c34;
-  // min-height: 100vh;
-
-  // font-family: 'SnesFont';
   filter: url("#pixelate");
-  // font-size: large;
-  // line-height: 3em;
 
   svg { display: block }
-  // h1 { 
-  //   color: rgb(136, 211, 255);
-  //   font-family: 'SnesFont';
-  // }
-  // * { 
-  //   color: rgb(136, 211, 255);
-  //   font-family: 'SnesFont';
-  //   text-shadow: 0 0 4px #88d3ff, 0 0 10px #88d3ff, 0 0 200px #88d3ff, 0 0 300px #88d3ff; // glow
-  // }
 }
 
 .Terminal-Viewer {

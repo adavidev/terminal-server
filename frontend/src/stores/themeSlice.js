@@ -6,6 +6,7 @@ export const themeSlice = createSlice({
     color: "#a9fe9d",
     backgroundColor: "#0f1c0d",
     alertColor: "red",
+    font: 'SnesFont'
   },
   reducers: {
     setColor: (state, action) => {
@@ -19,11 +20,14 @@ export const themeSlice = createSlice({
     setBackgroundColor: (state, action) => {
       state.backgroundColor = action.payload
     },
+    setFont: (state, action) => {
+      state.font = action.payload
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setColor, setBackgroundColor } = themeSlice.actions
+export const { setColor, setBackgroundColor, setFont } = themeSlice.actions
 
 export default themeSlice.reducer
 

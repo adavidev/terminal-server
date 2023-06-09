@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import TextBlock from './TerminalComponents/TextBlock'
 import InputField from './TerminalComponents/InputField'
 import { setMemory, fetchPages } from './stores/brainSlice'
-import { setColor, setBackgroundColor } from './stores/themeSlice'
+import { setColor, setBackgroundColor, setFont } from './stores/themeSlice'
 import { useSelector } from 'react-redux'
 import Links from './TerminalComponents/Links'
 import ScrollableDiv from './Components/ScrollableDiv'
@@ -127,11 +127,9 @@ function TerminalViewer() {
     if(config){
       dispatch(setColor(config.color))
       dispatch(setBackgroundColor(config.backgroundColor))
+      dispatch(setFont(config.font))
     }
   }, [config])
-
-  // useEffect(() => console.log(memory), [memory])
-  // useEffect(() => console.log(pages), [pages])
 
     return renderedItems.length ? (
       <StyledTerminal {...theme} className="scanlines terminal-app">

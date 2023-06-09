@@ -4,46 +4,46 @@ import { useSelector } from 'react-redux';
 
 export const P = styled.p`
   color: ${props => props.color};
-  font-family: 'SnesFont';
+  font-family: ${props => props.font || 'SnesFont'};
 `;
 
 export const Div = styled.div`
   color: ${props => props.color};
-  font-family: 'SnesFont';
+  font-family: ${props => props.font || 'SnesFont'};
 
 `;
 
 export const A = styled.a`
   color: ${props => props.color};
-  font-family: 'SnesFont';
+  font-family: ${props => props.font || 'SnesFont'};
 `;
 
 export const H1 = styled.h1`
   color: ${props => props.color};
-  font-family: 'SnesFont';
+  font-family: ${props => props.font || 'SnesFont'};
 `;
 
 export const H2 = styled.h2`
   color: ${props => props.color};
-  font-family: 'SnesFont';
+  font-family: ${props => props.font || 'SnesFont'};
 `;
 
 export const AlertText = styled.h2`
   color: ${props => props.alertColor};
-  font-family: 'SnesFont';
+  font-family: ${props => props.font || 'SnesFont'};
   text-shadow: 0 0 4px ${props => props.alertColor}, 0 0 10px ${props => props.alertColor}, 0 0 200px ${props => props.alertColor}, 0 0 300px ${props => props.alertColor}; // glow
 `;
 
 export const Input = styled.input`
   color: ${props => props.color};
-  font-family: 'SnesFont';
+  font-family: ${props => props.font || 'SnesFont'};
   text-shadow: 0 0 4px ${props => props.color}, 0 0 10px ${props => props.color}, 0 0 200px ${props => props.color}, 0 0 300px ${props => props.color}; // glow
 `;
 
 export const StyledTerminal = styled.div`
   text-align: left;
   background-color: ${props => props.backgroundColor};
-  font-family: 'SnesFont';
+  font-family: ${props => props.font || 'SnesFont'};
   min-height: 100vh;
   text-shadow: 0 0 4px ${props => props.color}, 0 0 10px ${props => props.color}, 0 0 200px ${props => props.color}, 0 0 300px ${props => props.color}; // glow
   font-size: large;
