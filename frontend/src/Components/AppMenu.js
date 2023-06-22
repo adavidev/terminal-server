@@ -14,6 +14,12 @@ export default () => (
       <li>
         <Link to="/signup">Signup</Link>
       </li>
+      <li>
+        <Link to="/testing">Testing</Link>
+      </li>
+      <li>
+        <Link to="/testing2">Testing2</Link>
+      </li>
     </ul>
   </nav>
 )

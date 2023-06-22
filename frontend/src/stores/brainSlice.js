@@ -5,8 +5,11 @@ export const brainSlice = createSlice({
   initialState: {
     memory: {
       page: 0,
+      cue: 0,
+      triggerAction: false,
     },
     pages: null,
+    cues: [],
     config: null,
   },
   reducers: {
@@ -22,11 +25,15 @@ export const brainSlice = createSlice({
       const content = JSON.parse(action.payload.config)
       state.pages = content.pages
       state.config = content.config
+    },
+    addCues: (state, action) => {
+      console.log(action.payload)
+      state.cues.push(action.payload)
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setMemory, fetchPages } = brainSlice.actions
+export const { setMemory, fetchPages, addCues } = brainSlice.actions
 
 export default brainSlice.reducer

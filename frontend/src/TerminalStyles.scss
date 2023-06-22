@@ -12,12 +12,19 @@
                             'embedded-opentype', and 'svg' */
 }
 
-// @font-face {
-//   font-family: 'SnesFont';
-//   src: local('SnesFont'), url(./fonts/PressStart2P-Regular.ttf) format('truetype');
-//   /* other formats include: 'woff2', 'truetype, 'opentype',
-//                             'embedded-opentype', and 'svg' */
-// }
+@font-face {
+  font-family: 'EGAFont';
+  src: local('EGAFont'), url('./fonts/oldschool_pc_font_pack_v2.2_FULL/ttf - Ac (aspect-corrected)/AcPlus_IBM_EGA_9x14-2x.ttf') format('truetype');
+  /* other formats include: 'woff2', 'truetype, 'opentype',
+                            'embedded-opentype', and 'svg' */
+}
+
+@font-face {
+  font-family: 'Apricot';
+  src: local('Apricot'), url('./fonts/oldschool_pc_font_pack_v2.2_FULL/ttf - Ac (aspect-corrected)/Ac437_ApricotXenC.ttf') format('truetype');
+  /* other formats include: 'woff2', 'truetype, 'opentype',
+                            'embedded-opentype', and 'svg' */
+}
 
 // terminal-server/frontend/src/fonts/oldschool_pc_font_pack_v2.2_FULL/ttf - Ac (aspect-corrected)/Ac437_Acer_VGA_9x8.ttf
 body {

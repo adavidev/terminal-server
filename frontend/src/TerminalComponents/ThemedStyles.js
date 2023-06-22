@@ -47,7 +47,8 @@ export const StyledTerminal = styled.div`
   min-height: 100vh;
   text-shadow: 0 0 4px ${props => props.color}, 0 0 10px ${props => props.color}, 0 0 200px ${props => props.color}, 0 0 300px ${props => props.color}; // glow
   font-size: large;
-  line-height: 3em;
+  line-height: 2em;
+  overflow-wrap: break-word;
 `
 
 const Styledthemes = () => {

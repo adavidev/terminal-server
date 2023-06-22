@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux"
-import LineInput from "../LineInput"
-import TypedText from "../TypedText"
+import LineInput from "./LineInput"
+import TypedText from "./TypedText"
 import { setMemory } from "../stores/brainSlice"
-import { H2 } from "../ThemedStyles"
+import { H2 } from "./ThemedStyles"
 
 export default ({doneCallback, options}) => {
   const {memoryName, prompt = '>', rules} = options

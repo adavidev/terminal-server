@@ -1,23 +1,59 @@
 {
   "config": {
-    "name": "Ypsilon-17",
-    "color": "#a9fe9d",
-    "backgroundColor": "#0f1c0d",
-    "font": "VGAFont"
+    "name": "Apricot-75",
+    "styles": {
+      "color": "#a9fe9d",
+      "backgroundColor": "#0f1c0d",
+      "font": "Apricot"
+    },
+    "preloadMemory": {
+      "users": [
+        {"username": "admin", "password": "admin", "level": "admin"},
+        {"username": "gandalf", "password": "3aglesFtw7", "level": "employee"},
+        {"username": "frodo", "password": "pr3cious", "level": "guest"}
+      ]
+    }
   },
   "pages": [
     {
       "id": "login",
       "type": "screen",
       "content": [
-        "Ypsilon-17 Station",
+        "Apricot-74 Station",
         "===========",
+        {
+          "type": "cue",
+          "id": "failLogin"
+        },
         "Please Log in:",
         {
           "type": "input",
           "prompt": "Name:",
           "memoryName": "username",
           "rules": []
+        },
+        {
+          "type": "input",
+          "prompt": "Password:",
+          "memoryName": "password",
+          "rules": []
+        },
+        {
+          "type": "verify",
+          "against": "users",
+          "values": ["username", "password"],
+          "passCue": "passLogin",
+          "failCue": "retryLogin",
+          "memoryName": "currrentUser"
+        },
+        {
+          "type": "goto",
+          "target": "diagnostics",
+          "name" : "airflow"
+        },
+        {
+          "type": "cue",
+          "id": "passLogin"
         },
         "Thanks {username}.",
         "======",
@@ -31,6 +67,10 @@
         "Main Menu",
         "=========",
         "",
+        {
+          "type": "cue",
+          "id": "menuCue"
+        },
         { "text": "> STATION MAP", "type": "links", "target": "map" },
         { "text": "> DIAGNOSTICS", "type": "links", "target": "diagnostics" },
         { "text": "> SCHEDULE", "type": "links", "target": "schedule" },
@@ -73,6 +113,10 @@
         "Checking main systems.............. Done.",
         "",
         {
+          "type": "cue",
+          "id": "airflow"
+        },
+        {
           "text": "WARNING: Airflow 82.4%. Check crew quarters vents for blockage.",
           "type": "inline-alert"
         },
@@ -91,6 +135,11 @@
         "",
         "======",
         "",
+        {
+          "type": "goto",
+          "target": "login",
+          "name" : "failLogin"
+        },
         { "text": "< BACK", "target": "menu", "type": "links" }
       ]
     },
@@ -177,7 +226,6 @@
         "============",
         "",
         "........................................................................................................................................................................",
-        "",
         { "type": "inline-alert", "text": "NO RESPONSE" },
         "",
         "======",

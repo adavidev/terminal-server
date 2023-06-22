@@ -1,10 +1,10 @@
-import TypedText from "../TypedText"
+import TypedText from "./TypedText"
 import { useSelector, useDispatch } from 'react-redux'
 import { setMemory } from "../stores/brainSlice"
-import { H2 } from "../ThemedStyles"
+import { H2 } from "./ThemedStyles"
 
 export default ({doneCallback, options}) => {
-  const [pages, memory] = useSelector((state) => [state.brain.pages, state.brain.memory])
+  const [pages, cues, memory] = useSelector((state) => [state.brain.pages, state.brain.cues, state.brain.memory])
   const [theme] = useSelector((state) => [state.theme])
   const dispatch = useDispatch()
 
@@ -16,7 +16,9 @@ export default ({doneCallback, options}) => {
     return interpolatedValue;
   }
 
-  const setPageTo = {page: pages.findIndex((page) => (page.id == options.target) )}
+  const page = pages.findIndex((page) => (page.id == options.target))
+
+  const setPageTo = {page: page, cue: 0}
   console.log(setPageTo)
   
   return (

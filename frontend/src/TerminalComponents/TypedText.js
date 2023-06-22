@@ -10,12 +10,12 @@ const Typewriter = ({ text, doneCallback = () => {} }) => {
         setTypedText(prevText => prevText + text[currentIndex]);
         setCurrentIndex(prevIndex => prevIndex + 1);
       }, 50);
-
+  
       return () => clearTimeout(timeout);
     } else {
       setTimeout(() => {
-        doneCallback()  
-      }, 200)
+        doneCallback();
+      }, 200);
     }
   }, [currentIndex, text]);
 

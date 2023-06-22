@@ -17,10 +17,12 @@ const Cursor = ({disabled = false}) => {
   
     }
     return () => clearTimeout(timeout);
-    }, [cursor, disabled]);
+  }, [cursor, disabled]);
 
   useEffect(() => {
     setcursor(false);
+    setStyle({visibility: 'hidden'})
+
   }, [disabled])
 
   return (

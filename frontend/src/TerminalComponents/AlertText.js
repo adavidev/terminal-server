@@ -1,5 +1,5 @@
-import { AlertText } from "../ThemedStyles"
-import TypedText from "../TypedText"
+import { AlertText } from "./ThemedStyles"
+import TypedText from "./TypedText"
 import { useSelector, useDispatch } from 'react-redux'
 
 export default ({doneCallback, options}) => {

@@ -1,5 +1,5 @@
-import { H2 } from "../ThemedStyles"
-import TypedText from "../TypedText"
+import { H2 } from "./ThemedStyles"
+import TypedText from "./TypedText"
 import { useSelector, useDispatch } from 'react-redux'
 
 export default ({doneCallback, options}) => {

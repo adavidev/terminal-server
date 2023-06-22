@@ -3,7 +3,7 @@ import './TerminalStyles.scss';
 import React, { useState, useEffect } from 'react'
 import TextBlock from './TerminalComponents/TextBlock'
 import InputField from './TerminalComponents/InputField'
-import { setMemory, fetchPages } from './stores/brainSlice'
+import { setMemory, fetchPages, addCues } from './stores/brainSlice'
 import { setColor, setBackgroundColor, setFont } from './stores/themeSlice'
 import { useSelector } from 'react-redux'
 import Links from './TerminalComponents/Links'
@@ -13,10 +13,11 @@ import { useDispatch } from "react-redux"
 import axios from 'axios'
 import { memo } from 'react'
 import SlowLoadImage from './TerminalComponents/SlowLoadImage'
-import { StyledTerminal } from './ThemedStyles'
+import { StyledTerminal } from './TerminalComponents/ThemedStyles'
 import AlertText from './TerminalComponents/AlertText'
+import Goto from './TerminalComponents/Goto'
 
-const fromConfig = (pages) => {
+const fromConfig = (pages, dispatch) => {
   console.log(pages)
   const typeDictionary = {
     screen: [
@@ -28,34 +29,49 @@ const fromConfig = (pages) => {
       },
       {
         determine: (val) => (val.type == 'inline-alert'),
-        resolve: (opts) => (({doneCallback}) => {
+        resolve: (opts, index) => (({doneCallback}) => {
           return (<AlertText doneCallback={doneCallback} options={opts}/>)
         })
       },
       {
         determine: (val) => (val.type == 'input'),
-        resolve: (opts) => (({doneCallback}) => {
+        resolve: (opts, index) => (({doneCallback}) => {
           return (<InputField doneCallback={doneCallback} options={opts}/>)
         })
       },
       {
         determine: (val) => (val.type == 'links'),
-        resolve: (opts) => (({doneCallback}) => {
+        resolve: (opts, index) => (({doneCallback}) => {
           return (<Links doneCallback={doneCallback} options={opts}/>)
         })
       },
       {
         determine: (val) => (val.type == 'image'),
-        resolve: (opts) => (({doneCallback}) => {
+        resolve: (opts, index) => (({doneCallback}) => {
           return (<SlowLoadImage doneCallback={doneCallback} options={opts}/>)
         })
+      },
+      {
+        determine: (val) => (val.type == 'goto'),
+        resolve: (opts, index) => (({doneCallback}) => {
+          return (<Goto doneCallback={doneCallback} options={opts}/>)
+        })
+      },
+      {
+        determine: (val) => (val.type == 'cue'),
+        resolve: (opts, index) => {
+          if(index) dispatch(addCues({type: opts.type, id: opts.id, index: index}))
+          return ({doneCallback}) => {
+          return doneCallback()
+        }}
       }
     ]
   }
 
   return pages.map((page) => {
-      return page.content.map((contentItem) => {
-        let item = typeDictionary[page.type].find(obj => obj.determine(contentItem))?.resolve(contentItem)
+      return page.content.map((contentItem, idx) => {
+        let item = typeDictionary[page.type].find((obj) => obj.determine(contentItem))?.resolve(contentItem, idx)
+        console.log(item)
         return item
       }
     )
@@ -66,6 +82,7 @@ function TerminalViewer() {
   const [renderIndex, setRenderIndex] = useState(1)
   const [renderedItems, setRenderedItems] = useState([])
   const [renderables, setRenderables] = useState(null)
+  const [jiggle, setJiggle] = useState(false)
   const [pages, memory, config] = useSelector((state) => [state.brain.pages, state.brain.memory, state.brain.config])
   const [theme] = useSelector((state) => [state.theme])
   const { name } = useParams();
@@ -91,16 +108,18 @@ function TerminalViewer() {
 
   useEffect(() => {
     if(pages !== null) {
-      let pCfg = fromConfig(pages)
-      console.log(pCfg)
-      setRenderables(pCfg)
+      let pageConfig = fromConfig(pages, dispatch)
+      console.log(pageConfig)
+      setRenderables(pageConfig)
     }
-  }, [pages])
+  }, [pages, jiggle])
 
   useEffect(() => {
+    console.log(renderables)
     if(renderables !== null){
       const readyToRenderItems = renderables[memory.page]
-      setRenderIndex(1)
+      setRenderIndex(Math.max(1, memory.cue))
+      console.log(renderIndex)
 
       setRenderedItems(
         readyToRenderItems
@@ -108,7 +127,7 @@ function TerminalViewer() {
             if (component) {
               return React.createElement(component, {
                 doneCallback: (newMemory) => {
-                  setMemory(newMemory)
+                  if(newMemory) setMemory(newMemory)
                   setRenderIndex(i => i + 1)
                 },
               })
@@ -120,29 +139,33 @@ function TerminalViewer() {
             return !!el
           })
       )
+      console.log(renderedItems)
+
+    } else {
+      setJiggle(!jiggle)
     }
-  }, [memory.page, renderables])
+  }, [memory.triggerAction, renderables])
 
   useEffect(() => {
     if(config){
-      dispatch(setColor(config.color))
-      dispatch(setBackgroundColor(config.backgroundColor))
-      dispatch(setFont(config.font))
+      dispatch(setColor(config.styles.color))
+      dispatch(setBackgroundColor(config.styles.backgroundColor))
+      dispatch(setFont(config.styles.font))
     }
   }, [config])
 
-    return renderedItems.length ? (
-      <StyledTerminal {...theme} className="scanlines terminal-app">
-        <div className="screen-cone"></div>
-        {/* <ScanLineSvg /> */}
-       
-        <ScrollableDiv>
-          <header className="Terminal-Viewer">
-            {renderedItems.slice(0, Math.min(renderIndex, renderedItems.length)).map((component) => component)}
-          </header>
-        </ScrollableDiv>
-      </StyledTerminal>
-    ) : null
+  return renderedItems.length ? (
+    <StyledTerminal {...theme} className="scanlines terminal-app">
+      <div className="screen-cone"></div>
+      {/* <ScanLineSvg /> */}
+      
+      <ScrollableDiv>
+        <header className="Terminal-Viewer">
+          {renderedItems.slice(Math.max(0, memory.cue), Math.min(renderIndex, renderedItems.length)).map((component) => component)}
+        </header>
+      </ScrollableDiv>
+    </StyledTerminal>
+  ) : null
 }
 
 export default TerminalViewer;

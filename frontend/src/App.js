@@ -10,7 +10,11 @@ import AppMenu from './Components/AppMenu'
 import TerminalList from './Components/TerminalList'
 import Login from './Components/LoginForm'
 import Signup from './Components/SignupForm'
-import ThemedStyles from './ThemedStyles'
+import ThemedStyles from './TerminalComponents/ThemedStyles'
+import AltInput from './TerminalComponents/AltInput'
+import LineInput from './TerminalComponents/LineInput'
+import MotherServer from './TerminalComponents/MotherServer'
+import MotherClient from './TerminalComponents/MotherClient'
 
 const App = () => {
   return (
@@ -21,6 +25,7 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/testing" element={<Testing />} />
+          <Route path="/testing2" element={<Testing2 />} />
           <Route path="/terminals" element={<Editor />} />
           <Route path="/viewer/:name" element={<TerminalViewer />} />
         </Routes>
@@ -72,7 +77,17 @@ const Editor = () => {
 const Testing = () => {
   return (
     <div className="App">
-        <ThemedStyles/>
+      <AppMenu />
+      <MotherServer/>
+    </div>
+  )
+};
+
+const Testing2 = () => {
+  return (
+    <div className="App">
+      <AppMenu />
+      <MotherClient/>
     </div>
   )
 };

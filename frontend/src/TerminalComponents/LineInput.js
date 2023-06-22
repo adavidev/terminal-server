@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import Cursor from './cursor'
+import Cursor from '../cursor'
 import { Input } from './ThemedStyles'
 import { useSelector } from 'react-redux'
 
@@ -20,6 +20,21 @@ const LineInput = ({ doneCallback }) => {
       doneCallback(event.target.value);
     }
   };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!disabled) {
+        inputRef.current.focus();
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
