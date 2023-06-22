@@ -147,7 +147,7 @@ function TerminalViewer() {
   }, [memory.triggerAction, renderables])
 
   useEffect(() => {
-    if(config){
+    if(config && config.styles){
       dispatch(setColor(config.styles.color))
       dispatch(setBackgroundColor(config.styles.backgroundColor))
       dispatch(setFont(config.styles.font))

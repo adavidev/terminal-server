@@ -59,14 +59,14 @@ const MotherClient = () => {
         />
         <button onClick={sendMessage}>Send</button>
       </div>
-      <div>
+      {/* <div>
         <h3>Connected Clients:</h3>
         <ul>
           {connectedClients.map((client, index) => (
             <li key={index}>{client}</li>
           ))}
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };
