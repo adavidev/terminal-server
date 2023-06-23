@@ -1,14 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-const MotherServer = () => {
+const clientMessage = ({sendMessage}) => {
+
+}
+
+const MotherServer = ({name = "mum"}) => {
   const [socket, setSocket] = useState(null);
   const [message, setMessage] = useState('');
   const [receivedMessages, setReceivedMessages] = useState([]);
   const [connectedClients, setConnectedClients] = useState([]);
 
   useEffect(() => {
-    const newSocket = io('http://localhost:5001');
+    let serverURL;
+
+    if (window.location.hostname === 'localhost') {
+      serverURL = `${window.location.protocol}//${window.location.hostname}:5001`; // Use current protocol and hostname without the port
+    } else {
+      serverURL = `${window.location.hostname}:5001`; // Specify the port if needed
+    }
+
+    const newSocket = io(serverURL);
 
     setSocket(newSocket);
 
@@ -45,7 +57,7 @@ const MotherServer = () => {
 
   const sendMessage = (recipient) => {
     if (message.trim() !== '') {
-      socket.emit('message', { message, recipient });
+      socket.emit('message', { message, recipient, senderInfo: {id: socket.id, name: name} });
       setMessage('');
     }
   };
@@ -54,7 +66,7 @@ const MotherServer = () => {
     <div>
       <div>
         {receivedMessages.map((msg, index) => (
-          <p key={index}>{msg}</p>
+          <p key={index}><strong>{msg.senderInfo.name}: </strong>{msg.message}</p>
         ))}
       </div>
       <div>
@@ -64,15 +76,15 @@ const MotherServer = () => {
           onChange={(e) => setMessage(e.target.value)}
         />
         <button onClick={() => sendMessage('all')}>Send to All</button>
-        <button onClick={() => sendMessage('client1')}>Send to Client 1</button>
-        <button onClick={() => sendMessage('client2')}>Send to Client 2</button>
+        {/* <button onClick={() => sendMessage('client1')}>Send to Client 1</button> */}
+        {/* <button onClick={() => sendMessage('client2')}>Send to Client 2</button> */}
         {/* Add more buttons for other clients as needed */}
       </div>
       <div>
         <h3>Connected Clients:</h3>
         <ul>
           {connectedClients.map((client, index) => (
-            <li key={index}>{client}</li>
+            <li key={index}><button onClick={() => sendMessage(client)}>Send to {client}</button></li>
           ))}
         </ul>
       </div>
