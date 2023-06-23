@@ -1,37 +1,20 @@
 const socketIO = require('socket.io');
-const http = require('http');
+const { Server } = require("socket.io");
 
-module.exports = { socketServer: (app, allowedPorts) => {
-    // Create the HTTP server
-    const server = http.createServer(app);
-
+module.exports = {
+  socketServer: (server) => {
     // Create the WebSocket server
-    const io = socketIO(server, {
-      cors: {
-        origin: function (origin, callback) {
-          // Allow requests without an origin header
-          if (!origin) {
-            return callback(null, true);
-          }
+    const io = new Server(server);
 
-          const requestedPort = parseInt(origin.split(':')[2], 10);
-
-          if (allowedPorts.includes(requestedPort)) {
-            callback(null, true);
-          } else {
-            callback(new Error('Not allowed by CORS'));
-          }
-        },
-        methods: ['GET', 'POST'],
-      },
-    });
     const activeTerminals = [];
 
     function broadcastMessage(message, recipient) {
       if (recipient === 'all') {
-        io.emit('message', message); // Broadcast to all connected clients
+        console.log("emitting to all: ", message)
+        io.emit('motherMessage', message); // Broadcast to all connected clients
       } else {
-        io.to(recipient).emit('message', message); // Broadcast to a specific client
+        console.log(`emitting to ${recipient}:` , message)
+        io.to(recipient).emit('motherMessage', message); // Broadcast to a specific client
       }
     }
 
@@ -44,13 +27,13 @@ module.exports = { socketServer: (app, allowedPorts) => {
       // Emit the updated connected clients list to all clients
       io.emit('clients', activeTerminals);
 
-      socket.on('message', ({ message, recipient, senderInfo }) => {
+      socket.on('motherMessage', ({ message, recipient, senderInfo }) => {
         // Handle the received message here
         // You can perform any necessary logic, such as routing the message to the appropriate recipients
         console.log('Message:', message);
 
         // Example: Broadcast the message to the intended recipient(s)
-        broadcastMessage({message, senderInfo}, recipient);
+        broadcastMessage({ message, senderInfo }, recipient || 'all');
       });
 
       socket.on('registerTerminal', (terminalId) => {
@@ -66,10 +49,10 @@ module.exports = { socketServer: (app, allowedPorts) => {
       socket.on('clientMessage', ({ message, senderInfo }) => {
         // Handle the received message here
         // You can perform any necessary logic, such as routing the message to the appropriate recipients
-        console.log("clientMessage: ", message)
+        console.log('clientMessage: ', message);
         // Example: Echo the message back to the sender
         // socket.emit('message', message);
-        io.emit('clientMessage', {message, senderInfo});
+        io.emit('clientMessage', { message, senderInfo });
       });
 
       socket.on('disconnect', (reason) => {
@@ -85,13 +68,5 @@ module.exports = { socketServer: (app, allowedPorts) => {
         io.emit('clients', activeTerminals);
       });
     });
-
-    // Use port from Heroku, fall back to default port
-    const port2 = Number(process.env.PORT) + 1 || 3456;
-
-    // Start the server
-    server.listen(port2, () => {
-      console.log(`Websocket Server available at http://localhost:${port2}`);
-    });
-  }
-}
+  },
+};

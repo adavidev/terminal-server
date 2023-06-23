@@ -4,7 +4,6 @@ const { User, Terminal, Link } = require('./models/models.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
-const {socketServer} = require('./backend/socketServer.js')
 
 const app = express();
 
@@ -38,22 +37,8 @@ app.use(express.static(__dirname + '/frontend/build'));
 app.get(/^(?!\/api\/).*/, (req, res) => {
   res.sendFile(__dirname + '/frontend/build/index.html');
 });
-app.use(express.json());
 
-// Serve the React app
-app.use(express.static(__dirname + '/frontend/build'));
-
-// Serve the index.html file for all non-API routes
-app.get(/^(?!\/api\/).*/, (req, res) => {
-  res.sendFile(__dirname + '/frontend/build/index.html');
-});
-
-
-// Use port from Heroku, fall back to default port
-const port = process.env.PORT || 3000;
-
-app.post('api/login', async (req, res) => {
-
+app.post('/api/login', async (req, res) => {
   // Inside the user login route handler
   const { email, password } = req.body;
 
@@ -82,8 +67,7 @@ app.post('api/login', async (req, res) => {
     // Passwords don't match, handle incorrect password
     return res.status(404).json({ error: 'Password did not match.' });
   }
-
-})
+});
 
 app.post('/api/users', async (req, res) => {
   try {
@@ -166,44 +150,15 @@ app.post('/api/terminals', async (req, res) => {
 
     const linkName = uuidv4();
     const link = await Link.create({ name: linkName, TerminalId: terminal.id });
-    console.log(link)
-    console.log(terminal)
+    console.log(link);
+    console.log(terminal);
 
-    res.status(201).json({terminal, link});
+    res.status(201).json({ terminal, link });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server error' });
   }
 });
 
-// Access the Terminal object associated with the Link
-app.get('/api/links/:name', async (req, res) => {
-  try {
-    const { name } = req.params;
-
-    // Find the Link based on the provided name
-    const link = await Link.findOne({ where: { name } });
-
-    if (!link) {
-      return res.status(404).json({ error: 'Link not found' });
-    }
-
-    // Get the associated Terminal for the Link
-    const terminal = await Terminal.findByPk(link.TerminalId);
-
-    if (!terminal) {
-      return res.status(404).json({ error: 'Terminal not found' });
-    }
-
-    res.status(200).json(terminal);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-app.listen(port, () => {
-  console.log(`App available at http://localhost:${port}`);
-});
-
-socketServer(app, allowedPorts)
+// Export the app instance
+module.exports = { app };

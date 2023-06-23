@@ -1,24 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-const MotherClient = ({name = "Jerry"}) => {
+const MotherClient = ({ name = 'Jerry' }) => {
   const [socket, setSocket] = useState(null);
   const [message, setMessage] = useState('');
   const [receivedMessages, setReceivedMessages] = useState([]);
   const [connectedTerminals, setConnectedTerminals] = useState([]);
 
   useEffect(() => {
-    let serverURL;
-
-    if (window.location.hostname === 'localhost') {
-      serverURL = `${window.location.protocol}//${window.location.hostname}:5001`; // Use current protocol and hostname without the port
-    } else {
-      serverURL = `${window.location.hostname}:5001`; // Specify the port if needed
-    }
-
-    const newSocket = io(serverURL);
+    const newSocket = io();
 
     setSocket(newSocket);
+
     // Clean up the socket connection on component unmount
     return () => {
       newSocket.disconnect();
@@ -29,12 +22,17 @@ const MotherClient = ({name = "Jerry"}) => {
     if (socket) {
       // Register the terminal ID with the server
       socket.emit('registerTerminal', 'terminal1'); // Replace 'terminal1' with the appropriate terminal ID
-  
+
       // Listen for incoming messages from the server
-      socket.on('message', (message) => {
+      socket.on('clientMessage', (message) => {
         setReceivedMessages((prevMessages) => [...prevMessages, message]);
       });
-  
+
+      // Listen for incoming messages from the server
+      socket.on('motherMessage', (message) => {
+        setReceivedMessages((prevMessages) => [...prevMessages, message]);
+      });
+
       // Listen for updates to the list of active terminals
       socket.on('activeTerminals', (activeTerminals) => {
         setConnectedTerminals(activeTerminals);
@@ -42,24 +40,13 @@ const MotherClient = ({name = "Jerry"}) => {
     }
   }, [socket]);
 
-  useEffect(() => {
-    if (socket) {
-      // Listen for incoming messages from the server
-      // socket.on('message', (message) => {
-      //   setReceivedMessages((prevMessages) => [...prevMessages, message]);
-      // });
-
-      // Listen for updates to the connected clients list
-      socket.on('clients', (clients) => {
-        setConnectedTerminals(clients);
-      });
-    }
-  }, [socket]);
-
   const sendMessage = () => {
     if (message.trim() !== '') {
-      // Emit a 'message' event to the server with the message content
-      socket.emit('clientMessage', { message, senderInfo: {id: socket.id, name: name} });
+      // Emit a 'clientMessage' event to the server with the message content
+      socket.emit('clientMessage', {
+        message,
+        senderInfo: { id: socket.id, name: name },
+      });
 
       // Clear the input field after sending the message
       setMessage('');
@@ -70,7 +57,10 @@ const MotherClient = ({name = "Jerry"}) => {
     <div>
       <div>
         {receivedMessages.map((msg, index) => (
-          <p key={index}><strong>{msg.senderInfo.name}: </strong>{msg.message}</p>
+          <p key={index}>
+            <strong>{msg.senderInfo.name}: </strong>
+            {msg.message}
+          </p>
         ))}
       </div>
       <div>
@@ -81,6 +71,14 @@ const MotherClient = ({name = "Jerry"}) => {
         />
         <button onClick={sendMessage}>Send</button>
       </div>
+      {/* <div>
+        <h3>Connected Clients:</h3>
+        <ul>
+          {connectedTerminals.map((client, index) => (
+            <li key={index}>{client}</li>
+          ))}
+        </ul>
+      </div> */}
     </div>
   );
 };

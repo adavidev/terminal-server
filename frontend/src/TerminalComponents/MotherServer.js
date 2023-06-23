@@ -12,15 +12,7 @@ const MotherServer = ({name = "mum"}) => {
   const [connectedClients, setConnectedClients] = useState([]);
 
   useEffect(() => {
-    let serverURL;
-
-    if (window.location.hostname === 'localhost') {
-      serverURL = `${window.location.protocol}//${window.location.hostname}:5001`; // Use current protocol and hostname without the port
-    } else {
-      serverURL = `${window.location.hostname}:5001`; // Specify the port if needed
-    }
-
-    const newSocket = io(serverURL);
+    const newSocket = io();
 
     setSocket(newSocket);
 
@@ -31,7 +23,7 @@ const MotherServer = ({name = "mum"}) => {
 
   useEffect(() => {
     if (socket) {
-      socket.on('message', (message) => {
+      socket.on('motherMessage', (message) => {
         setReceivedMessages((prevMessages) => [...prevMessages, message]);
       });
 
@@ -57,7 +49,11 @@ const MotherServer = ({name = "mum"}) => {
 
   const sendMessage = (recipient) => {
     if (message.trim() !== '') {
-      socket.emit('message', { message, recipient, senderInfo: {id: socket.id, name: name} });
+      socket.emit('motherMessage', {
+        message,
+        recipient,
+        senderInfo: { id: socket.id, name: name },
+      });
       setMessage('');
     }
   };
@@ -76,9 +72,6 @@ const MotherServer = ({name = "mum"}) => {
           onChange={(e) => setMessage(e.target.value)}
         />
         <button onClick={() => sendMessage('all')}>Send to All</button>
-        {/* <button onClick={() => sendMessage('client1')}>Send to Client 1</button> */}
-        {/* <button onClick={() => sendMessage('client2')}>Send to Client 2</button> */}
-        {/* Add more buttons for other clients as needed */}
       </div>
       <div>
         <h3>Connected Clients:</h3>

@@ -2,9 +2,9 @@
   "name": "terminal-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "start.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node start.js"
   },
   "engines": {
     "node": "18.x"
