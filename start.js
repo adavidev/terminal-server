@@ -9,6 +9,6 @@ const server = http.createServer(app);
 socketServer(server);
 
 // Start the HTTP server
-server.listen(5000, () => {
-  console.log(`Server listening on port ${5000}`);
+server.listen(process.env.PORT || 5000, () => {
+  console.log(`Server listening on port ${process.env.PORT || 5000}`);
 });
