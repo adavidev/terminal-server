@@ -16,6 +16,9 @@ import SlowLoadImage from './TerminalComponents/SlowLoadImage'
 import { StyledTerminal } from './TerminalComponents/ThemedStyles'
 import AlertText from './TerminalComponents/AlertText'
 import Goto from './TerminalComponents/Goto'
+import GoIf from './TerminalComponents/GoIf'
+import Splash from './TerminalComponents/Splash'
+import LinkIf from './TerminalComponents/LinkIf'
 
 const fromConfig = (pages, dispatch) => {
   console.log(pages)
@@ -46,6 +49,12 @@ const fromConfig = (pages, dispatch) => {
         })
       },
       {
+        determine: (val) => (val.type == 'linkif'),
+        resolve: (opts, index) => (({doneCallback}) => {
+          return (<LinkIf doneCallback={doneCallback} options={opts}/>)
+        })
+      },
+      {
         determine: (val) => (val.type == 'image'),
         resolve: (opts, index) => (({doneCallback}) => {
           return (<SlowLoadImage doneCallback={doneCallback} options={opts}/>)
@@ -58,12 +67,16 @@ const fromConfig = (pages, dispatch) => {
         })
       },
       {
-        determine: (val) => (val.type == 'cue'),
-        resolve: (opts, index) => {
-          if(index) dispatch(addCues({type: opts.type, id: opts.id, index: index}))
-          return ({doneCallback}) => {
-          return doneCallback()
-        }}
+        determine: (val) => (val.type == 'goif'),
+        resolve: (opts, index) => (({doneCallback}) => {
+          return (<GoIf doneCallback={doneCallback} options={opts}/>)
+        })
+      },
+      {
+        determine: (val) => (val.type == 'splash'),
+        resolve: (opts, index) => (({doneCallback}) => {
+          return (<Splash doneCallback={doneCallback} options={opts}/>)
+        })
       }
     ]
   }
@@ -118,8 +131,7 @@ function TerminalViewer() {
     console.log(renderables)
     if(renderables !== null){
       const readyToRenderItems = renderables[memory.page]
-      setRenderIndex(Math.max(1, memory.cue))
-      console.log(renderIndex)
+      setRenderIndex(1)
 
       setRenderedItems(
         readyToRenderItems
@@ -144,7 +156,7 @@ function TerminalViewer() {
     } else {
       setJiggle(!jiggle)
     }
-  }, [memory.triggerAction, renderables])
+  }, [memory.page, renderables])
 
   useEffect(() => {
     if(config && config.styles){
@@ -161,7 +173,7 @@ function TerminalViewer() {
       
       <ScrollableDiv>
         <header className="Terminal-Viewer">
-          {renderedItems.slice(Math.max(0, memory.cue), Math.min(renderIndex, renderedItems.length)).map((component) => component)}
+          {renderedItems.slice(0, Math.min(renderIndex, renderedItems.length)).map((component) => component)}
         </header>
       </ScrollableDiv>
     </StyledTerminal>

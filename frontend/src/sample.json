@@ -1,6 +1,6 @@
 {
   "config": {
-    "name": "Apricot-75",
+    "name": "Apricot-78",
     "styles": {
       "color": "#a9fe9d",
       "backgroundColor": "#0f1c0d",
@@ -8,23 +8,34 @@
     },
     "preloadMemory": {
       "users": [
-        {"username": "admin", "password": "admin", "level": "admin"},
-        {"username": "gandalf", "password": "3aglesFtw7", "level": "employee"},
-        {"username": "frodo", "password": "pr3cious", "level": "guest"}
+        {"username": "admin", "password": "admin", "securityLevel": "admin"},
+        {"username": "gandalf", "password": "3aglesFtw7", "securityLevel": "employee"},
+        {"username": "frodo", "password": "pr3cious", "securityLevel": "guest"}
       ]
     }
   },
   "pages": [
     {
+      "id": "startup",
+      "type": "screen",
+      "content": [
+        { 
+          "type": "splash",
+          "src": "https://i.stack.imgur.com/HjFIp.gif",
+          "delay": 3000
+        },
+        {
+          "type": "goto",
+          "target": "login"
+        }
+      ]
+    },
+    {
       "id": "login",
       "type": "screen",
       "content": [
-        "Apricot-74 Station",
+        "Apricot-78 Station",
         "===========",
-        {
-          "type": "cue",
-          "id": "failLogin"
-        },
         "Please Log in:",
         {
           "type": "input",
@@ -39,25 +50,18 @@
           "rules": []
         },
         {
-          "type": "verify",
+          "type": "goif",
           "against": "users",
           "values": ["username", "password"],
-          "passCue": "passLogin",
+          "passCue": "login",
           "failCue": "retryLogin",
-          "memoryName": "currrentUser"
-        },
-        {
-          "type": "goto",
-          "target": "diagnostics",
-          "name" : "airflow"
-        },
-        {
-          "type": "cue",
-          "id": "passLogin"
+          "memoryName": "securityLevel"
         },
         "Thanks {username}.",
-        "======",
-        { "text": "> MENU", "target": "menu", "type": "links" }
+        {
+          "type": "goto",
+          "target": "menu"
+        }
       ]
     },
     {
@@ -76,7 +80,7 @@
         { "text": "> SCHEDULE", "type": "links", "target": "schedule" },
         { "text": "> ROSTER", "type": "links", "target": "roster" },
         { "text": "> COMMS", "type": "links", "target": "comms" },
-        { "text": "> CONTROLS", "type": "links", "target": "controls" }
+        { "text": "> CONTROLS", "type": "linkif", "target": "controls", "values": ["securityLevel"], "equals": ["admin"] }
       ]
     },
     {
@@ -231,6 +235,56 @@
         "======",
         "",
         { "text": "< BACK", "target": "comms", "type": "links" }
+      ]
+    },
+    {
+      "id": "retryLogin",
+      "type": "screen",
+      "content": [
+        { "type": "inline-alert", "text": "NOT FOUND" },
+        {
+          "type": "input",
+          "prompt": "Name:",
+          "memoryName": "username",
+          "rules": []
+        },
+        {
+          "type": "input",
+          "prompt": "Password:",
+          "memoryName": "password",
+          "rules": []
+        },
+        {
+          "type": "goif",
+          "against": "users",
+          "values": ["username", "password"],
+          "passCue": "menu",
+          "failCue": "failedLogin",
+          "memoryName": "securityLevel"
+        }
+      ]
+    },
+    {
+      "id": "failedLogin",
+      "type": "screen",
+      "content": [
+        { "type": "inline-alert", "text": "USER NOT FOUND. GOODBYE" },
+        "⠀⠀⠀⢀⣠⣤⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⢠⣾⡿⠛⠻⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠸⣿⠧⠿⠶⠋⢻⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⢻⡄⠀⢀⣀⠈⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠈⣿⡀⠛⠉⠀⠹⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⢸⣧⠀⠀⠀⠀⢻⣦⣤⣤⣤⣤⢤⣄⡀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⢰⡿⡿⡄⢀⣠⣤⣀⢻⡁⠀⠈⢧⠀⠈⠻⣦⠀⠀⠀⠀",
+        "⠀⠀⣰⣿⣛⣀⣷⠘⠫⠟⠛⠀⢣⠀⠀⠀⢣⠀⠀⠘⢷⡀⠀⠀",
+        "⢀⣾⣿⠟⠃⠀⠘⣇⠀⠀⠀⠀⠈⢧⠀⠀⠀⢧⠀⠀⠈⢻⣄⠀",
+        "⢸⡇⡇⠀⠀⠀⠀⠈⢆⠀⠀⠀⠀⠈⣆⠀⠀⠘⣧⠀⠀⠀⢻⡄",
+        "⠈⣷⢹⡀⠀⠀⠀⠀⠘⣆⠀⠀⠀⠀⠘⡄⠀⠀⠋⠀⠀⢀⣿⠁",
+        "⠀⣿⠈⢇⠀⠀⠀⠀⠐⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢀⣾⠃⠀",
+        "⠀⣿⠀⠘⡄⠀⠀⠀⠀⠈⠀⠀⠀⠀⠀⠀⢠⠀⠀⣸⡿⠃⠀⠀",
+        "⠀⠙⠳⣦⣽⡄⠀⠀⠀⠀⢸⡀⠀⠀⠀⠀⣸⡶⠾⠋⠀⠀⠀⠀",
+        "⠀⠀⠀⠈⠻⣿⣦⣄⣀⣤⠴⠷⢤⣤⠶⠟⠁⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠈⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
       ]
     }
   ]

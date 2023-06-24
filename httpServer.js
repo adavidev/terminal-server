@@ -94,7 +94,6 @@ app.get('/api/users', async (req, res) => {
   const users = await User.findAll();
   res.json(users);
 });
-
 app.get('/api/terminals', async (req, res) => {
   try {
     const terminals = await Terminal.findAll({
@@ -103,57 +102,65 @@ app.get('/api/terminals', async (req, res) => {
         attributes: ['name'],
       },
     });
-
     res.json(terminals);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server error' });
   }
 });
-
 app.get('/api/links', async (req, res) => {
   const links = await Link.findAll();
   res.json(links);
 });
-
 app.post('/api/links', async (req, res) => {
   try {
     const { terminalId } = req.body;
-
     // Generate a UUID for the Link name
     const linkName = uuidv4();
-
     // Find the Terminal based on the provided terminalId
     const terminal = await Terminal.findOne({ where: { id: terminalId } });
-
     if (!terminal) {
       return res.status(404).json({ error: 'Terminal not found' });
     }
-
     // Create the Link with the generated name and associated Terminal
     const link = await Link.create({ name: linkName, resource: terminal });
-
     res.status(201).json(link);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server error' });
   }
 });
-
 // Create a new Terminal
 app.post('/api/terminals', async (req, res) => {
   try {
     const { config } = req.body;
-
     // Create the Terminal with the provided config
     const terminal = await Terminal.create({ config });
-
     const linkName = uuidv4();
     const link = await Link.create({ name: linkName, TerminalId: terminal.id });
-    console.log(link);
-    console.log(terminal);
-
-    res.status(201).json({ terminal, link });
+    console.log(link)
+    console.log(terminal)
+    res.status(201).json({terminal, link});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+// Access the Terminal object associated with the Link
+app.get('/api/links/:name', async (req, res) => {
+  try {
+    const { name } = req.params;
+    // Find the Link based on the provided name
+    const link = await Link.findOne({ where: { name } });
+    if (!link) {
+      return res.status(404).json({ error: 'Link not found' });
+    }
+    // Get the associated Terminal for the Link
+    const terminal = await Terminal.findByPk(link.TerminalId);
+    if (!terminal) {
+      return res.status(404).json({ error: 'Terminal not found' });
+    }
+    res.status(200).json(terminal);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server error' });

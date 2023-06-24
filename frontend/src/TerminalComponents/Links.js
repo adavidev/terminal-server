@@ -3,8 +3,15 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setMemory } from "../stores/brainSlice"
 import { H2 } from "./ThemedStyles"
 
+// Data Layout:
+// { 
+//   "text": "> STATION MAP", 
+//   "type": "links", 
+//   "target": "map" 
+// }
+
 export default ({doneCallback, options}) => {
-  const [pages, cues, memory] = useSelector((state) => [state.brain.pages, state.brain.cues, state.brain.memory])
+  const [pages, memory] = useSelector((state) => [state.brain.pages, state.brain.memory])
   const [theme] = useSelector((state) => [state.theme])
   const dispatch = useDispatch()
 
@@ -16,9 +23,7 @@ export default ({doneCallback, options}) => {
     return interpolatedValue;
   }
 
-  const page = pages.findIndex((page) => (page.id == options.target))
-
-  const setPageTo = {page: page, cue: 0}
+  const setPageTo = {page: pages.findIndex((page) => (page.id == options.target) )}
   console.log(setPageTo)
   
   return (
