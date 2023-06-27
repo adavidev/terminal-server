@@ -8,9 +8,17 @@
     },
     "preloadMemory": {
       "users": [
+        {"username": "sverhoeven@87DF", "password": "R1pL3y!", "securityLevel": "admin"},
+        {"username": "asingh@A0Y3", "password": "0v3rC0ff33", "securityLevel": "employee"},
+        {"username": "dbeers@33CF", "password": "Fl1rtyD1v@", "securityLevel": "employee"},
+        {"username": "jchatzkel@00A1", "password": "B1gB00t!3$", "securityLevel": "employee"},
+        {"username": "rtobin@00A9", "password": "N3bul@H@ul", "securityLevel": "employee"},
+        {"username": "mradimir@0A06", "password": "G3@r$h1ft3r", "securityLevel": "employee"},
+        {"username": "kkantaro@157D", "password": "R0ughn3ck$", "securityLevel": "employee"},
+        {"username": "mbowe@4CF5", "password": "W3yland-YuT@n!", "securityLevel": "employee"},
         {"username": "admin", "password": "admin", "securityLevel": "admin"},
-        {"username": "gandalf", "password": "3aglesFtw7", "securityLevel": "employee"},
-        {"username": "frodo", "password": "pr3cious", "securityLevel": "guest"}
+        {"username": "employee", "password": "employee", "securityLevel": "employee"},
+        {"username": "guest", "password": "guest", "securityLevel": "guest"}
       ]
     }
   },
@@ -76,11 +84,11 @@
           "id": "menuCue"
         },
         { "text": "> STATION MAP", "type": "links", "target": "map" },
-        { "text": "> DIAGNOSTICS", "type": "links", "target": "diagnostics" },
-        { "text": "> SCHEDULE", "type": "links", "target": "schedule" },
+        { "text": "> DIAGNOSTICS", "type": "linkif", "target": "diagnostics", "value": "securityLevel", "equals": ["employee", "admin"] },
+        { "text": "> SCHEDULE", "type": "linkif", "target": "schedule", "value": "securityLevel", "equals": ["employee", "admin"] },
         { "text": "> ROSTER", "type": "links", "target": "roster" },
         { "text": "> COMMS", "type": "links", "target": "comms" },
-        { "text": "> CONTROLS", "type": "linkif", "target": "controls", "values": ["securityLevel"], "equals": ["admin"] }
+        { "text": "> CONTROLS", "type": "linkif", "target": "controls", "value": "securityLevel", "equals": ["admin"] }
       ]
     },
     {
@@ -139,11 +147,6 @@
         "",
         "======",
         "",
-        {
-          "type": "goto",
-          "target": "login",
-          "name" : "failLogin"
-        },
         { "text": "< BACK", "target": "menu", "type": "links" }
       ]
     },
@@ -158,8 +161,8 @@
         "",
         "2366-06-12.0633 - Bay 2 : Arrive :: Tempest",
         "2366-04-29.0834 - Bay 1 : Arrive :: Heracles",
-        "2366-03-02.1223 - Bay 2 : Depart :: Key Largo",
-        "2366-02-20.1604 - Bay 2 : Arrive :: Key Largo",
+        "2366-03-02.1223 - Bay 2 : Depart :: Key 76 Largo",
+        "2366-02-20.1604 - Bay 2 : Arrive :: Key 76 Largo",
         "",
         "======",
         "",
@@ -173,16 +176,16 @@
         "Roster",
         "======",
         "",
-        "01. VERHOEVEN, Sonya     :: Admin",
-        "02. SINGH, Ashraf        :: Breaker",
-        "03. DE BEERS, Dana       :: Lead drill",
-        "04. CHATZKEL, Jerome     :: Asst. drill",
-        "05. TOBIN, Rosa          :: Engineer",
-        "06. RADIMIR, Mikhail     :: Lead Engineer",
-        "07. KANTARO, Kenji       :: Loader",
-        "08. BOWE, Morgan         :: Loader",
-        "09. NEKTARIOS, Ri        :: Loader",
-        "10. n/a",
+        "87DF. VERHOEVEN, Sonya     :: Admin",
+        "A0Y3. SINGH, Ashraf        :: Breaker",
+        "33CF. DE BEERS, Dana       :: Lead drill",
+        "00A1. CHATZKEL, Jerome     :: Asst. drill",
+        "00A9. TOBIN, Rosa          :: Engineer",
+        "0A06. RADIMIR, Mikhail     :: Lead Engineer",
+        "157D. KANTARO, Kenji       :: Loader",
+        "4CF5. BOWE, Morgan         :: Loader",
+        "ACA3. NEKTARIOS, Ri        :: Loader",
+        "n/a. n/a",
         "",
         "======",
         "",

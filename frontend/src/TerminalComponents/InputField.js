@@ -10,7 +10,6 @@ export default ({doneCallback, options}) => {
   const dispatch = useDispatch()
 
   const callback = (value) => {
-    dispatch(setMemory({[memoryName]: value}))
     doneCallback({[memoryName]: value})
   }
 

@@ -19,6 +19,9 @@ import Goto from './TerminalComponents/Goto'
 import GoIf from './TerminalComponents/GoIf'
 import Splash from './TerminalComponents/Splash'
 import LinkIf from './TerminalComponents/LinkIf'
+import Toggle from './TerminalComponents/Toggle'
+import Dialog from './TerminalComponents/Dialog'
+import DTextBlock from './TerminalComponents/DialogComponents/DTextBlock'
 
 const fromConfig = (pages, dispatch) => {
   console.log(pages)
@@ -77,7 +80,31 @@ const fromConfig = (pages, dispatch) => {
         resolve: (opts, index) => (({doneCallback}) => {
           return (<Splash doneCallback={doneCallback} options={opts}/>)
         })
+      },
+      {
+        determine: (val) => (val.type == 'toggle'),
+        resolve: (opts, index) => (({doneCallback}) => {
+          return (<Toggle doneCallback={doneCallback} options={opts}/>)
+        })
+      },
+      {
+        determine: (val) => (val.type == 'dialog'),
+        resolve: (opts, index) => (({doneCallback}) => {
+          useEffect(() => {
+            dispatch(setMemory({dialog: opts.target}))
+            doneCallback()
+          }, [])
+          return null
+        })
       }
+    ],
+    dialog: [
+      {
+        determine: (val) => (typeof val == 'string'),
+        resolve: (text) => (({doneCallback}) => {
+          return (<DTextBlock doneCallback={doneCallback} options={text}/>)
+        })
+      },
     ]
   }
 
@@ -89,6 +116,62 @@ const fromConfig = (pages, dispatch) => {
       }
     )
   })
+}
+
+const DialogViewer = ({}) => {
+  const [pages, memory, config, dialogs] = useSelector((state) => [state.brain.pages, state.brain.memory, state.brain.config, state.brain.dialogs])
+  const [theme] = useSelector((state) => [state.theme])
+  
+  const [renderIndex, setRenderIndex] = useState(1)
+  const [renderedItems, setRenderedItems] = useState([])
+  const [renderables, setRenderables] = useState(null)
+  const [jiggle, setJiggle] = useState(false)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if(!!dialogs) {
+      let pageConfig = fromConfig(dialogs, dispatch)
+      console.log(pageConfig)
+      setRenderables(pageConfig)
+    }
+  }, [dialogs, jiggle, memory.dialog])
+
+  useEffect(() => {
+    console.log(renderables)
+    console.log(dialogs && dialogs.find((di) => di.id == memory.dialog))
+    if(renderables !== null && !!memory.dialog){
+      const dialog = dialogs.map((di, idx) => ({...di, idx})).find((di) => di.id == memory.dialog).idx
+      const readyToRenderItems = renderables[dialog]
+      setRenderIndex(1)
+
+      setRenderedItems(
+        readyToRenderItems
+          .map((component) => {
+            if (component) {
+              return React.createElement(component, {
+                doneCallback: (newMemory) => {
+                  if(newMemory) dispatch(setMemory(newMemory))
+                  setRenderIndex(i => i + 1)
+                },
+              })
+            } else {
+              return null
+            }
+          })
+          .filter(function (el) {
+            return !!el
+          })
+      )
+      console.log(renderedItems)
+
+    } else {
+      setJiggle(!jiggle)
+    }
+  }, [memory.dialog, renderables])
+
+  return (
+    !!memory.dialog && <Dialog close={() => {dispatch(setMemory({dialog: ''}))}}>{renderedItems.map((component) => component)}</Dialog>
+  )
 }
 
 function TerminalViewer() {
@@ -139,7 +222,7 @@ function TerminalViewer() {
             if (component) {
               return React.createElement(component, {
                 doneCallback: (newMemory) => {
-                  if(newMemory) setMemory(newMemory)
+                  if(newMemory) dispatch(setMemory(newMemory))
                   setRenderIndex(i => i + 1)
                 },
               })
@@ -174,6 +257,7 @@ function TerminalViewer() {
       <ScrollableDiv>
         <header className="Terminal-Viewer">
           {renderedItems.slice(0, Math.min(renderIndex, renderedItems.length)).map((component) => component)}
+          <DialogViewer />
         </header>
       </ScrollableDiv>
     </StyledTerminal>

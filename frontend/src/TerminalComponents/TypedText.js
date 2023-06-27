@@ -19,6 +19,11 @@ const Typewriter = ({ text, doneCallback = () => {} }) => {
     }
   }, [currentIndex, text]);
 
+  useEffect(() => {
+    setTypedText('')
+    setCurrentIndex(0)
+  }, [text])
+
   return <span>{typedText}</span>;
 };
 

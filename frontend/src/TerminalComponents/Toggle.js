@@ -2,47 +2,17 @@ import TypedText from "./TypedText"
 import { useSelector, useDispatch } from 'react-redux'
 import { setMemory } from "../stores/brainSlice"
 import { H2 } from "./ThemedStyles"
+import { useEffect, useState } from "react"
 
 // Data Layout:
-// { 
-//   "text": "> STATION MAP", 
-//   "type": "links", 
-//   "target": "map" 
-//   "value": "securityLevel",
-//   "equals": ["admin"]
-// }
-
-// Brain Example 
 // {
-//   brain: {
-//     memory: {
-//       page: 1,
-//       username: 'gandalf',
-//       password: '3aglesFtw7'
-//       securityLevel: 'employee'
-//     },
-//     config: {
-//       preloadMemory: {
-//         users: [
-//           {
-//             username: 'admin',
-//             password: 'admin',
-//             securityLevel: 'admin'
-//           },
-//           {
-//             username: 'gandalf',
-//             password: '3aglesFtw7',
-//             securityLevel: 'employee'
-//           },
-//           {
-//             username: 'frodo',
-//             password: 'pr3cious',
-//             securityLevel: 'guest'
-//           }
-//         ]
-//       }
-//     }
-//   }
+//   "type": "toggle",
+//   "memoryName": "shower4Status",
+//   "text": "> SHOWER 4 ::",
+//   "states": [
+//     "OFF",
+//     "ON"
+//   ]
 // }
 
 export default ({doneCallback, options}) => {
@@ -58,23 +28,26 @@ export default ({doneCallback, options}) => {
     return interpolatedValue;
   }
 
-  const { against, value, equals } = options
+  const { states, memoryName, text } = options
+  const [state, setState] = useState(memory[memoryName] == undefined ? true : false)
+  const [showOption, setShowOption] = useState(false)
 
-  const determination = equals.find((val2) => val2 == memory[value]) != null
 
-  const setPageTo = {page: pages.findIndex((page) => (page.id == options.target) )}
-  console.log(setPageTo)
-  console.log(determination)
-  if(determination){
-    return (
-      <H2 {...theme} onClick={() => {dispatch(setMemory(setPageTo))}}>
-        <TypedText doneCallback={doneCallback} text={interpolateNamedValues(options.text, memory)}/>
-      </H2>
-    )
-  } else {
-    doneCallback()
-    return null
+  const changeStates = () => {
+    dispatch(setMemory({[memoryName]: !state}))
+    // setState(!state)
   }
+
+  useEffect(() => {
+    setState(memory[memoryName])
+  }, [memory[memoryName]])
+
+  return (
+    <H2 {...theme} onClick={changeStates}>
+      <TypedText doneCallback={() => setShowOption(true)} text={interpolateNamedValues(text, memory)}/>
+      {showOption && <TypedText doneCallback={doneCallback} text={interpolateNamedValues(states[state ? 1 : 0], memory)}/>}
+    </H2>
+  )
 }
 
 // const [pages, memory, config] = useSelector((state) => [state.brain.pages, state.brain.memory, state.brain.config])

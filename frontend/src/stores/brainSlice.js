@@ -5,9 +5,11 @@ export const brainSlice = createSlice({
   initialState: {
     memory: {
       page: 0,
+      dialog: '',
     },
     pages: null,
     config: null,
+    dialogs: null
   },
   reducers: {
     setMemory: (state, action) => {
@@ -20,7 +22,12 @@ export const brainSlice = createSlice({
     fetchPages: (state, action) => {
       console.log('Running: ', action.payload)
       const content = JSON.parse(action.payload.config)
-      state.pages = content.pages
+      state.pages = content.pages.filter((page) => {
+        return page.type == "screen"
+      })
+      state.dialogs = content.pages.filter((page) => {
+        return page.type == "dialog"
+      })
       state.config = content.config
     }
   },

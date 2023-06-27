@@ -1,0 +1,89 @@
+{
+  "config": {
+    "name": "Testing-29",
+    "styles": {
+      "color": "#a9fe9d",
+      "backgroundColor": "#0f1c0d",
+      "font": "Apricot"
+    },
+    "preloadMemory": {
+      "users": [
+        {"username": "sverhoeven@87DF", "password": "R1pL3y!", "securityLevel": "admin"},
+        {"username": "asingh@A0Y3", "password": "0v3rC0ff33", "securityLevel": "employee"},
+        {"username": "dbeers@33CF", "password": "Fl1rtyD1v@", "securityLevel": "employee"},
+        {"username": "jchatzkel@00A1", "password": "B1gB00t!3$", "securityLevel": "employee"},
+        {"username": "rtobin@00A9", "password": "N3bul@H@ul", "securityLevel": "employee"},
+        {"username": "mradimir@0A06", "password": "G3@r$h1ft3r", "securityLevel": "employee"},
+        {"username": "kkantaro@157D", "password": "R0ughn3ck$", "securityLevel": "employee"},
+        {"username": "mbowe@4CF5", "password": "W3yland-YuT@n!", "securityLevel": "employee"},
+        {"username": "admin", "password": "admin", "securityLevel": "admin"},
+        {"username": "employee", "password": "employee", "securityLevel": "employee"},
+        {"username": "guest", "password": "guest", "securityLevel": "guest"}
+      ]
+    }
+  },
+  "pages": [
+    {
+      "id": "first",
+      "type": "screen",
+      "content": [
+        "showers1",
+        {
+          "type": "toggle",
+          "memoryName": "shower1Status",
+          "text": "> SHOWER 1 :: ",
+          "states": [
+            "OFF",
+            "ON"
+          ]
+        },
+        { "type": "dialog", "target": "airlockError" },
+        { "text": "> SECOND", "type": "links", "target": "second" }
+      ]
+    },
+    {
+      "id": "second",
+      "type": "screen",
+      "content": [
+        "showers2",
+        {
+          "type": "toggle",
+          "memoryName": "shower1Status",
+          "text": "> SHOWER 1 :: ",
+          "states": [
+            "OFF",
+            "ON"
+          ]
+        },
+        {
+          "type": "toggle",
+          "memoryName": "shower2Status",
+          "text": "> SHOWER 2 :: ",
+          "states": [
+            "OFF",
+            "ON"
+          ]
+        },
+        {
+          "type": "toggle",
+          "memoryName": "shower3Status",
+          "text": "> SHOWER 3 :: ",
+          "states": [
+            "OFF",
+            "ON"
+          ]
+        },
+        { "text": "> FIRST", "type": "links", "target": "first" }
+      ]
+    },
+    {
+      "id": "airlockError",
+      "type": "dialog",
+      "content": [
+        "ERROR! Lock override in effect.",
+        "",
+        "Cannot unlock remotely. Manual intervention required."
+      ]
+    }
+  ]
+}

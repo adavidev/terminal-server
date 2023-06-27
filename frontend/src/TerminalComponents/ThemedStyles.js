@@ -51,6 +51,24 @@ export const StyledTerminal = styled.div`
   overflow-wrap: break-word;
 `
 
+export const DialogWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ContentWrapper = styled.div`
+  background-color: ${props => props.color};
+  color: ${props => props.backgroundColor} !important;
+  padding: 16px;
+`;
+
 const Styledthemes = () => {
   const [color, backgroundColor] = useSelector((state) => [state.theme.color, state.theme.backgroundColor])
 
