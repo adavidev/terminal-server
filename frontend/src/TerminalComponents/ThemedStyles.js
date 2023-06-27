@@ -65,7 +65,6 @@ export const DialogWrapper = styled.div`
 
 export const ContentWrapper = styled.div`
   background-color: ${props => props.color};
-  color: ${props => props.backgroundColor} !important;
   padding: 16px;
 `;
 
