@@ -11,24 +11,24 @@ app.use(express.json());
 
 // Set up CORS middleware to allow requests from specific origins
 const allowedPorts = [Number(process.env.PORT), Number(process.env.PORT) + 1]; // Add your allowed ports to the array
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow requests without an origin header
-      if (!origin) {
-        return callback(null, true);
-      }
+// app.use(
+//   cors({
+//     origin: function (origin, callback) {
+//       // Allow requests without an origin header
+//       if (!origin) {
+//         return callback(null, true);
+//       }
 
-      const requestedPort = parseInt(origin.split(':')[2], 10);
+//       const requestedPort = parseInt(origin.split(':')[2], 10);
 
-      if (allowedPorts.includes(requestedPort)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-  })
-);
+//       if (allowedPorts.includes(requestedPort)) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error('Not allowed by CORS'));
+//       }
+//     },
+//   })
+// );
 
 // Serve the React app
 app.use(express.static(__dirname + '/frontend/build'));
