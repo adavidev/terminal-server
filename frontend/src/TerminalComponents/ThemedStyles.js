@@ -25,6 +25,7 @@ export const H1 = styled.h1`
 
 export const H2 = styled.h2`
   color: ${props => props.color};
+  line-height: 1.3em;
   font-family: ${props => props.font || 'SnesFont'};
 `;
 

@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 
-// Data Item Layout:
-// { 
-//   "type": "splash",
-//   "src": "https://i.imgur.com/htHuumj.png",
-//   "delay": 3000
-// },
-
 export default ({ doneCallback, options }) => {
   const [pages, memory, config] = useSelector((state) => [state.brain.pages, state.brain.memory, state.brain.config])
   const dispatch = useDispatch()
@@ -27,24 +20,37 @@ export default ({ doneCallback, options }) => {
   }, []);
 
   return (
-    <div>
-      {showImage && (
-        <div style={{
-          background: ` 
-          linear-gradient(
-            ${config.styles.color}30, 
-            ${config.styles.color}30
-          ),
-          url(${src})`,
+    <div style={{ 
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100vw',
+          height: '100vh',
           position: 'fixed',
           top: '0px',
           left: '0px',
-          width: '100vw',
-          height: '100vh',
-          objectFit: 'contain',
+          color: config.styles.color // Set color for pseudo-element to inherit
+        }}>
+      {showImage && (
+        <div style={{
+          backgroundImage: `url(${src})`,
           backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
           backgroundSize: "contain",
-        }}></div>
+          width: '100%',
+          height: '100%',
+          position: 'relative' // Needed to position pseudo-element
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            backgroundColor: config.styles.color, // Inherit color from parent element
+            opacity: 0.3 // Adjust opacity to achieve desired tint intensity
+          }}></div>
+        </div>
       )}
     </div>
   );

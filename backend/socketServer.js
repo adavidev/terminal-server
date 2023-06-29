@@ -6,7 +6,7 @@ module.exports = {
     // Create the WebSocket server
     const io = new Server(server);
 
-    const activeTerminals = [];
+    const activeTerminals = {};
 
     function broadcastMessage(message, recipient) {
       if (recipient === 'all') {
@@ -22,10 +22,10 @@ module.exports = {
       console.log(`connect ${socket.id}`);
 
       // Add the connected user to the activeTerminals array
-      activeTerminals.push(socket.id);
+      // activeTerminals.push(socket.id);
 
       // Emit the updated connected clients list to all clients
-      io.emit('clients', activeTerminals);
+      // io.emit('clients', activeTerminals);
 
       socket.on('motherMessage', ({ message, recipient, senderInfo }) => {
         // Handle the received message here
@@ -65,7 +65,7 @@ module.exports = {
         }
 
         // Emit the updated connected clients list to all clients
-        io.emit('clients', activeTerminals);
+        io.emit('activeTerminals', activeTerminals);
       });
     });
   },
